@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import list from './list';
 import { Grid, Row, FormGroup } from 'react-bootstrap';
 
+
+const DEFAULT_QUERY = 'react';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+
+const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}`;
+console.log(url);
 // filter the results by search
 function isSearched(searchTerm){
   return function(item){
@@ -19,21 +27,45 @@ class App extends Component {
 
     // setting up state
     this.state = {
-      list,
-      searchTerm: ''
+      result : null,
+      searchTerm: DEFAULT_QUERY
     }
 
     // bind the functions to this (app component)
     this.removeItem = this.removeItem.bind(this);
     this.searchValue = this.searchValue.bind(this);
+    this.loadData = this.loadData.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
+loadData(result){
+  this.setState({ result : result });
+}
+
+
+fetchData(searchTerm){
+  fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+  .then(response => response.json())
+  .then(result => this.loadData(result))
+  .catch(e => e)
+}
+
+componentDidMount(){
+  this.fetchData(this.state.searchTerm);
+}
+
+onSubmit(event){
+  this.fetchData(this.state.searchTerm);
+  event.preventDefault();
+}
 
  // lets rewrite removeItem function in ES6
  removeItem(id){
+   const {result} = this.state;
   // const isNotId = item => item.objectID !== id;
-  const updatedList = this.state.list.filter(item => item.objectID !== id);
-  this.setState({ list: updatedList });
+  const updatedList = result.hits.filter(item => item.objectID !== id);
+  this.setState({result:{...result, hits: updatedList} });
  }
 
  // get input field value from search form
@@ -44,7 +76,9 @@ class App extends Component {
 
   render() {
 
-    const { list, searchTerm } = this.state;
+    const { result, searchTerm } = this.state;
+
+    // if(!result){return null;}
 
     console.log(this);
 
@@ -58,17 +92,20 @@ class App extends Component {
             <Search
               onChange={ this.searchValue }
               value={ searchTerm }
+              onSubmit={this.onSubmit}
             >NEWSAPP</Search>
 
             </div>
           </Row>
         </Grid>
+        { result &&
+          <Table
+            list={ result.hits }
+            searchTerm={ searchTerm }
+            removeItem={ this.removeItem }
+          />
+        }
 
-        <Table
-          list={ list }
-          searchTerm={ searchTerm }
-          removeItem={ this.removeItem }
-        />
 
       </div>
     );
@@ -76,9 +113,9 @@ class App extends Component {
 }
 
 
-const Search = ({ onChange, value, children }) => {
+const Search = ({ onChange, value, children, onSubmit }) => {
   return(
-      <form>
+      <form onSubmit={onSubmit}>
       <FormGroup>
 
         <h1 style={{ fontWeight: 'bold' }}>{ children }</h1>
@@ -91,12 +128,14 @@ const Search = ({ onChange, value, children }) => {
           type="text"
           onChange={ onChange }
           value={ value }
+
         />
 
         <span className="input-group-btn">
           <button
             className="btn btn-primary searchBtn"
             type="submit"
+            // onSubmit={onSubmit}
           >
             Search
           </button>
