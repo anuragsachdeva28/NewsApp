@@ -125,20 +125,24 @@ onSubmit(event){
             </div>
           </Row>
         </Grid>
+        <Grid>
+          <Row>
+            <Table
+                list={ list }
+                searchTerm={ searchTerm }
+                removeItem={ this.removeItem }
+              />
 
-          <Table
-            list={ list }
-            searchTerm={ searchTerm }
-            removeItem={ this.removeItem }
-          />
+            <div className="text-center alert">
+              <Button
+                className="btn btn-success"
+                onClick={()=>this.fetchData(searchTerm, page+1)}>
+                Load More
+              </Button>
+            </div>
+          </Row>
+        </Grid>
 
-        <div className="text-center alert">
-          <Button
-            className="btn btn-success"
-            onClick={()=>this.fetchData(searchTerm, page+1)}>
-            Load More
-          </Button>
-        </div>
 
       </div>
     );
