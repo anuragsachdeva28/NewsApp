@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import list from './list';
 import { Grid, Row, FormGroup } from 'react-bootstrap';
-import {DEFAULT_QUERY, DEFAULT_PAGE, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM_PAGE, PARAM_HPP} from './constants/index'
-
+import {DEFAULT_QUERY, DEFAULT_PAGE, DEFAULT_HPP, PATH_BASE, PATH_SEARCH, PARAM_SEARCH, PARAM_PAGE, PARAM_HPP} from './constants/index';
+import  PropTypes from 'prop-types';
 
 
 const url = `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}&${PARAM_PAGE}&${PARAM_HPP}${DEFAULT_HPP}`;
@@ -216,6 +216,12 @@ const Button = ({ onClick, children, className='' }) =>
     { children }
   </button>
 
+// PropTypes are used to validate props which are passed from parents to children
+Button.propTypes={
+  onClick : PropTypes.func,
+  className : PropTypes.string,
+  children : PropTypes.nodes
+}
 
 
 
