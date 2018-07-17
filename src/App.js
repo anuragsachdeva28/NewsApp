@@ -41,7 +41,7 @@ class App extends Component {
     // bind the functions to this (app component)
     this.removeItem = this.removeItem.bind(this);
     this.searchValue = this.searchValue.bind(this);
-    this.loadData = this.loadData.bind(this);
+    // this.loadData = this.loadData.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
