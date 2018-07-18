@@ -141,39 +141,43 @@ onSubmit(event){
 }
 
 
-const Search = ({ onChange, value, children, onSubmit }) => {
-  return(
-      <form onSubmit={onSubmit}>
-      <FormGroup>
+class Search extends Component {
+  render(){
+  const { onChange, value, children, onSubmit } = this.props;
 
-        <h1 style={{ fontWeight: 'bold' }}>{ children }</h1>
-        <hr style={{ border: '2px solid black', width: '100px' }} />
+    return(
+        <form onSubmit={onSubmit}>
+        <FormGroup>
 
-        <div className="input-group">
+          <h1 style={{ fontWeight: 'bold' }}>{ children }</h1>
+          <hr style={{ border: '2px solid black', width: '100px' }} />
 
-        <input
-          className="form-control width100 searchForm"
-          type="text"
-          onChange={ onChange }
-          value={ value }
+          <div className="input-group">
 
-        />
+          <input
+            className="form-control width100 searchForm"
+            type="text"
+            onChange={ onChange }
+            value={ value }
 
-        <span className="input-group-btn">
-          <Button
-            className="btn btn-primary searchBtn"
-            type="submit"
-            // onSubmit={onSubmit}
-          >
-            Search
-          </Button>
-        </span>
+          />
 
-        </div>
+          <span className="input-group-btn">
+            <Button
+              className="btn btn-primary searchBtn"
+              type="submit"
+              // onSubmit={onSubmit}
+            >
+              Search
+            </Button>
+          </span>
 
-        </FormGroup>
-      </form>
-    )
+          </div>
+
+          </FormGroup>
+        </form>
+      )
+  }
 }
 
 
@@ -208,6 +212,19 @@ const Table = ({ list, searchTerm, removeItem }) => {
     )
 }
 
+//explicit propTypes
+Table.propTypes = {
+  list: PropTypes.arrayOf(
+    PropTypes.shape({
+      objectID: PropTypes.string.isRequired,
+      author:  PropTypes.string,
+      url: PropTypes.string,
+      num_comments: PropTypes.number,
+      points:  PropTypes.number
+    })
+  ).isRequired,
+  removeItem: PropTypes.func.isRequired,
+}
 
 const Button = ({ onClick, children, className='' }) =>
   <button
@@ -217,12 +234,16 @@ const Button = ({ onClick, children, className='' }) =>
   </button>
 
 // PropTypes are used to validate props which are passed from parents to children
-Button.propTypes={
-  onClick : PropTypes.func,
+// makes code less prone to error
+Button.propTypes = {
+  onClick : PropTypes.func.isRequired,
   className : PropTypes.string,
-  children : PropTypes.nodes
+  children : PropTypes.node.isRequired
 }
 
-
+//the PropType check will happen only when the default props is evaluated once
+Button.defaultProps = {
+  className : ''
+}
 
 export default App;
