@@ -26,7 +26,8 @@ class App extends Component {
     this.state = {
       results : null,
       searchKey : '',
-      searchTerm: DEFAULT_QUERY
+      searchTerm : DEFAULT_QUERY,
+      isLoading : false,
     }
 
     // bind the functions to this (app component)
@@ -49,11 +50,14 @@ loadData(result){
 
   const updatedHits = [...oldHits, ...hits];
   console.log("New hits are : ",updatedHits);
-  this.setState({ results: { ...results, [searchKey]: {hits: updatedHits, page} } });
+  this.setState({ results: { ...results, [searchKey]: {hits: updatedHits, page}},
+                  isLoading : false});
 }
 
 
 fetchData(searchTerm,page){
+  this.setState({isLoading: true});
+
   fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
   .then(response => response.json())
   .then(result => this.loadData(result))
@@ -93,7 +97,7 @@ onSubmit(event){
 
   render() {
 
-    const { results, searchTerm, searchKey } = this.state;
+    const { results, searchTerm, searchKey, isLoading } = this.state;
     const page = (results && results[searchKey] && results[searchKey].page)||0;
     const list = (results && results[searchKey] && results[searchKey].hits) || [];
     // if(!result){return null;}
@@ -119,18 +123,21 @@ onSubmit(event){
         <Grid>
           <Row>
             <Table
-                list={ list }
-                searchTerm={ searchTerm }
-                removeItem={ this.removeItem }
-              />
-
+              list={ list }
+              searchTerm={ searchTerm }
+              removeItem={ this.removeItem }
+            />
             <div className="text-center alert">
-              <Button
-                className="btn btn-success"
-                onClick={()=>this.fetchData(searchTerm, page+1)}>
-                Load More
-              </Button>
-            </div>
+              { isLoading ? <Loader></Loader> :
+                <Button
+                  className="btn btn-success"
+                  onClick={()=>this.fetchData(searchTerm, page+1)}>
+                  Load More
+                </Button>
+              }
+              </div>
+
+
           </Row>
         </Grid>
 
@@ -250,5 +257,9 @@ Button.propTypes = {
 Button.defaultProps = {
   className : ''
 }
+
+const Loader = () =>
+<div>Loading...</div>
+
 
 export default App;
