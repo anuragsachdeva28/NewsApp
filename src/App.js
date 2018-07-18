@@ -32,7 +32,7 @@ class App extends Component {
     // bind the functions to this (app component)
     this.removeItem = this.removeItem.bind(this);
     this.searchValue = this.searchValue.bind(this);
-    // this.loadData = this.loadData.bind(this);
+    this.loadData = this.loadData.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -142,6 +142,11 @@ onSubmit(event){
 
 
 class Search extends Component {
+  componentDidMount(){
+    // var ele = this.refs.ref1;
+    // ele.focus();
+    this.input.focus();
+  }
   render(){
   const { onChange, value, children, onSubmit } = this.props;
 
@@ -159,7 +164,7 @@ class Search extends Component {
             type="text"
             onChange={ onChange }
             value={ value }
-
+            ref = {(node) => {this.input = node}}
           />
 
           <span className="input-group-btn">
