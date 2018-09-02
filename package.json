@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.10",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.2",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.2",
-    "react-scripts": "1.0.11"
+    "react-scripts": "^1.1.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -19,8 +19,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://kaloraat.github.io/udemy-react-newsapp",
+  "homepage": "https://anuragsachdeva28.github.io/NewsApp",
   "devDependencies": {
-    "gh-pages": "^1.0.0"
+    "gh-pages": "^1.2.0"
   }
 }
